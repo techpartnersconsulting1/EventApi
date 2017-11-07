@@ -30,7 +30,7 @@ namespace EventApi.Controllers
                 dto1.Name = "Test1";
                 dto1.LocationVenue = "Class room";
                 dto1.NeedStudentEnrollment = "No";
-                dto1.OccuranceType = new OccuranceTypeDto { Id = "1", Name = "OneTime" };
+                dto1.OccuranceType = new OccuranceTypeDto { Id = "One Time", Name = "One Time" };
                 dto1.IsActive = "Active";
                 dto1.Schedules = new List<ScheduleDto>();
                 dto1.Schedules.Add(new ScheduleDto { StartDate = "08/27/2017", EndDate = "08/27/2017", StartTime = "11:00 AM", EndTime = "12:00 PM" });
@@ -102,10 +102,10 @@ namespace EventApi.Controllers
             {
                 Response<EventTypesDtoList> resp = new Response<EventTypesDtoList>();
                 EventTypesDtoList list = new EventTypesDtoList();
-                list.EventTypes.Add(new EventTypeDto {Id = "1", Name = "School" });
-                list.EventTypes.Add(new EventTypeDto { Id = "2", Name = "Grade" });
-                list.EventTypes.Add(new EventTypeDto { Id = "3", Name = "Class" });
-                list.EventTypes.Add(new EventTypeDto { Id = "4", Name = "School District" });
+                list.EventTypes.Add(new EventTypeDto {Id = "School", Name = "School" });
+                list.EventTypes.Add(new EventTypeDto { Id = "Grade", Name = "Grade" });
+                list.EventTypes.Add(new EventTypeDto { Id = "Class", Name = "Class" });
+                list.EventTypes.Add(new EventTypeDto { Id = "School District", Name = "School District" });
                 resp.SetDto(list);
                 resp.Message = "Data retrieved.";
                 result =  new OkObjectResult(resp);
@@ -173,9 +173,9 @@ namespace EventApi.Controllers
             {
                 Response<OccuranceTypeList> resp = new Response<OccuranceTypeList>();
                 OccuranceTypeList list = new School.Api.Event.Model.OccuranceTypeList();
-                list.OccurenceTypes.Add(new OccuranceTypeDto { Id= "1" ,Name= "Weekly" });
-                list.OccurenceTypes.Add(new OccuranceTypeDto { Id = "2", Name = "One Time" });
-                list.OccurenceTypes.Add(new OccuranceTypeDto { Id = "3", Name = "Custom" });
+                list.OccurenceTypes.Add(new OccuranceTypeDto { Id= "Weekly", Name= "Weekly" });
+                list.OccurenceTypes.Add(new OccuranceTypeDto { Id = "One Time", Name = "One Time" });
+                list.OccurenceTypes.Add(new OccuranceTypeDto { Id = "Custom", Name = "Custom" });
 
                 resp.SetDto(list);
                 resp.Message = "Data retrieved.";
