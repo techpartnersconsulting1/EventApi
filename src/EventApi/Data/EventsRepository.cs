@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using School.Api.Event.Model;
 using School.Api.Event.Services;
 
@@ -22,7 +23,7 @@ namespace School.Api.Event.Data
 
         public EventDtoList Search(SearchDto dto)
         {
-            var eventList = new List<EventDto>();
+            var eventList = new EventDtoList();
 
             // Provide the query string with a parameter placeholder.
             string queryString = "[dbo].[sp_AdmGetEvents]";
@@ -42,29 +43,13 @@ namespace School.Api.Event.Data
                         var dr = command.ExecuteReader();
                         while (dr.Read())
                         {
-                            EventDto eventFound = new EventDto()
+                            var jsonStr = dr["dto"] as string;
+                            if (!string.IsNullOrWhiteSpace(jsonStr))
                             {
-                                Id = "",
-                                Name = "",
-                                IsActive = "",
-                                // others
-                            };
-                            // dto = new School.Api.Event.Model.EventDto();
-                            //EventDtoList list = new School.Api.Event.Model.EventDtoList();
-                            //EventDto dto1 = new EventDto();
-                            //dto1.Id = "123";
-                            //dto1.Name = "Test1";
-                            //dto1.LocationVenue = "Class room";
-                            //dto1.NeedStudentEnrollment = "No";
-                            //dto1.OccuranceType = new OccuranceTypeDto { Id = "1", Name = "OneTime" };
-                            //dto1.IsActive = "Active";
-                            //dto1.Schedules = new List<ScheduleDto>();
-                            //dto1.Schedules.Add(new ScheduleDto { StartDate = "08/27/2017", EndDate = "08/27/2017", StartTime = "11:00 AM", EndTime = "12:00 PM" });
-                            //dto1.Association = new EventAssociationDto();
-                            //dto1.Association.EventType = new School.Api.Event.Model.EventTypeDto { Id = "1", Name = "Class" }; 
-                            //dto1.Association.ClassIds = new List<string> { "1" };
-                            //list.Events.Add(dto1);
-                            eventList.Add(eventFound);
+                                var jarray = JArray.Parse(jsonStr);
+                                var list = jarray.ToObject<List<EventDto>>();
+                                eventList.Events.AddRange(list);
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -73,7 +58,7 @@ namespace School.Api.Event.Data
                     }
                 }
             }
-            return new EventDtoList() {Events = eventList};
+            return eventList;
         }
 
         public EventDto Save(SaveRequestDto dto)

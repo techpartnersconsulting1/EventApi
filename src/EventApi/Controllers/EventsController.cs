@@ -34,10 +34,8 @@ namespace EventApi.Controllers
             }
             catch (Exception ex)
             {
+                ExceptionDetails errDt = new ExceptionDetails {Message = ex.StackTrace};
                 ErrorResponse errResp = new ErrorResponse();
-                ExceptionDetails errDt = new ExceptionDetails();
-                errDt.Message = ex.StackTrace;
-
                 errResp.SetException(errDt);
                 result = StatusCode(500, errResp);
 

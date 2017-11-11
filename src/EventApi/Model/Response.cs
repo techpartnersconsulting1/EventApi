@@ -1,53 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace School.Api.Event.Model
+﻿namespace School.Api.Event.Model
 {
     public class Response<T>
     {
-       
-
-        public Response()
-        {
-           
-        }
-
         public string Message { get; set; } = string.Empty;
 
-        public  T Dto { get; set; } = default(T);
+        public T Dto { get; set; }
 
-     
 
-        public void SetDto( T dto )
+        public void SetDto(T dto)
         {
-
             Dto = dto;
-
-        }
-
-   
-    }
-
-    public class ErrorResponse
-    {
-
-
-        public ErrorResponse()
-        {
-
-        }
-
-
-        private ExceptionDetails ErrorDetails { get; set; } = default(ExceptionDetails);
-
-
-        public void SetException(ExceptionDetails exDet)
-        {
-
-            ErrorDetails = exDet;
-
         }
     }
 }
