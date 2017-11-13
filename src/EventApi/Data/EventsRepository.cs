@@ -61,11 +61,9 @@ namespace School.Api.Event.Data
             return eventList;
         }
 
-        public EventDto Save(SaveRequestDto dto)
+        public string Save(SaveRequestDto dto)
         {
-            // Provide the query string with a parameter placeholder.
             string queryString = "[dbo].[sp_AdmAddEvent]";
-
             using (SqlConnection connection = new SqlConnection(OptionsConString.ConnectionString))
             {
                 // Create the Command and Parameter objects.
@@ -75,35 +73,26 @@ namespace School.Api.Event.Data
                     {
                         connection.Open();
                         command.CommandType = CommandType.StoredProcedure;
-                        command.Parameters.Add(new SqlParameter { ParameterName = "@id", DbType = DbType.String, Value = dto.EventDto.Id });
-                        //command.Parameters.Add(new SqlParameter { ParameterName = "@FirstName", DbType = DbType.String, Value = dto.Request.Fname });
-                        //command.Parameters.Add(new SqlParameter { ParameterName = "@LastName", DbType = DbType.String, Value = dto.Request.Lname });
-                        //command.Parameters.Add(new SqlParameter { ParameterName = "@UserTypeId", DbType = DbType.Decimal, Value = Convert.ToDecimal(dto.Request.UserTypeId, CultureInfo.InvariantCulture) });
-                        //command.Parameters.Add(new SqlParameter { ParameterName = "@SchoolID", DbType = DbType.Int32, Value = Convert.ToInt32(dto.Request.SchoolId) });
-                        //command.Parameters.Add(new SqlParameter { ParameterName = "@SchoolDistrictID", DbType = DbType.Int32, Value = Convert.ToInt32(dto.Request.SchooldistrictId) });
-                        //command.Parameters.Add(new SqlParameter { ParameterName = "@IsActive", DbType = DbType.String, Value = dto.Request.IsActive });
-                        var dr = command.ExecuteReader();
-                        while (dr.Read())
+                        var serializedEventDto = JObject.FromObject(dto.EventDto).ToString();
+                        command.Parameters.Add(new SqlParameter { ParameterName = "@EventData", DbType = DbType.String, Value = serializedEventDto });
+                        var scalar = command.ExecuteScalar();
+                        var output = scalar as string;
+                        if (output == null)
                         {
-                            EventDto eventDto = new EventDto();
-                            //eventDto.Fname = dr["FirstName"].ToString();
-                            //eventDto.Lname = dr["LastName"].ToString();
-                            //eventDto.UserIdEmail = dr["Email"].ToString();
-                            //eventDto.SchooldistrictId = dr["SchoolDistrictID"].ToString();
-                            //eventDto.SchoolId = dr["SchoolID"].ToString();
-
-                            //eventDto.UserTypeId = dr["UserType"].ToString(); //"Superuser_School"
-                            //eventDto.Id = dr["userid"].ToString();
-                            //eventDto.IsActive = dto.Request.IsActive;
-                            return eventDto;
+                            throw new Exception("Unknown error");
                         }
+                        if (!output.Contains("{"))
+                        {
+                            // consider it as error message
+                            throw new Exception(output);
+                        }
+                        return output;
                     }
                     catch (Exception ex)
                     {
                         throw;
                     }
                 }
-                return null;
             }
         }
     }

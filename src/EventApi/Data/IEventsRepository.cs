@@ -9,6 +9,6 @@ namespace School.Api.Event.Data
     public interface IEventsRepository
     {
         EventDtoList Search(SearchDto dto);
-        EventDto Save(SaveRequestDto dto);
+        string Save(SaveRequestDto dto);
     }
 }

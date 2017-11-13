@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using School.Api.Event.Data;
 using School.Api.Event.Model;
-
 
 namespace EventApi.Controllers
 {
@@ -13,10 +10,7 @@ namespace EventApi.Controllers
     [Produces("application/json")]
     public class EventsController : Controller
     {
-        private IEventsRepository Repository
-        {
-            get;
-        }
+        private IEventsRepository Repository { get; }
 
 
         [HttpPost]
@@ -26,7 +20,7 @@ namespace EventApi.Controllers
             ObjectResult result = null;
             try
             {
-                Response<EventDtoList> resp = new Response<EventDtoList>();
+                var resp = new Response<EventDtoList>();
                 var foundList = Repository.Search(request.Request);
                 resp.SetDto(foundList);
                 resp.Message = "Data retrieved.";
@@ -34,11 +28,10 @@ namespace EventApi.Controllers
             }
             catch (Exception ex)
             {
-                ExceptionDetails errDt = new ExceptionDetails {Message = ex.StackTrace};
-                ErrorResponse errResp = new ErrorResponse();
+                var errDt = new ExceptionDetails {Message = ex.StackTrace};
+                var errResp = new ErrorResponse();
                 errResp.SetException(errDt);
                 result = StatusCode(500, errResp);
-
             }
             return result;
         }
@@ -51,77 +44,68 @@ namespace EventApi.Controllers
             ObjectResult result = null;
             try
             {
-                Response<EventDto> resp = new Response<EventDto>();
-                var dto = Repository.Save(request.Request);
-                resp.SetDto(dto);
-                resp.Message = "Saved.";
+                var resp = new Response<EventDto>();
+                var jsonResp = Repository.Save(request.Request);
+                var jobj = JObject.Parse(jsonResp);
+                var newEvent = jobj.ToObject<EventDto>();
+                resp.SetDto(newEvent);
+                resp.Message = "Event saved.";
                 result = new OkObjectResult(resp);
-
             }
             catch (Exception ex)
             {
-                ErrorResponse errResp = new School.Api.Event.Model.ErrorResponse();
-                ExceptionDetails errDt = new School.Api.Event.Model.ExceptionDetails();
+                var errResp = new ErrorResponse();
+                var errDt = new ExceptionDetails();
                 errDt.Message = ex.StackTrace;
 
                 errResp.SetException(errDt);
                 result = StatusCode(500, errResp);
-
             }
             return result;
-
         }
 
 
-        // GET api/values
         [HttpGet]
         [Route("EventTypes")]
         public IActionResult GetAllEventTypes()
         {
-           
-           
             ObjectResult result = null;
             try
             {
-                Response<EventTypesDtoList> resp = new Response<EventTypesDtoList>();
-                EventTypesDtoList list = new EventTypesDtoList();
-                list.EventTypes.Add(new EventTypeDto {Id = "1", Name = "School" });
-                list.EventTypes.Add(new EventTypeDto { Id = "2", Name = "Grade" });
-                list.EventTypes.Add(new EventTypeDto { Id = "3", Name = "Class" });
-                list.EventTypes.Add(new EventTypeDto { Id = "4", Name = "School District" });
+                var resp = new Response<EventTypesDtoList>();
+                var list = new EventTypesDtoList();
+                list.EventTypes.Add(new EventTypeDto {Id = "1", Name = "School"});
+                list.EventTypes.Add(new EventTypeDto {Id = "2", Name = "Grade"});
+                list.EventTypes.Add(new EventTypeDto {Id = "3", Name = "Class"});
+                list.EventTypes.Add(new EventTypeDto {Id = "4", Name = "School District"});
                 resp.SetDto(list);
                 resp.Message = "Data retrieved.";
-                result =  new OkObjectResult(resp);
+                result = new OkObjectResult(resp);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                ErrorResponse errResp = new School.Api.Event.Model.ErrorResponse();
-                ExceptionDetails errDt = new School.Api.Event.Model.ExceptionDetails();
+                var errResp = new ErrorResponse();
+                var errDt = new ExceptionDetails();
                 errDt.Message = ex.StackTrace;
 
                 errResp.SetException(errDt);
-                result =  StatusCode(500, errResp);
-
+                result = StatusCode(500, errResp);
             }
 
             return result;
-
         }
 
-        // GET api/values
         [HttpGet]
         [Route("ActiveTypes")]
         public IActionResult ActiveTypes()
         {
-
-
             ObjectResult result = null;
             try
             {
-                Response<ActiveTypesDtoList> resp = new Response<ActiveTypesDtoList>();
-                ActiveTypesDtoList list = new ActiveTypesDtoList();
-                list.ActiveTypes.Add(new ActiveTypesDto { Name = "Active" ,Id = "Active" });
-                list.ActiveTypes.Add(new ActiveTypesDto { Name = "InActive" , Id = "InActive" });
+                var resp = new Response<ActiveTypesDtoList>();
+                var list = new ActiveTypesDtoList();
+                list.ActiveTypes.Add(new ActiveTypesDto {Name = "Active", Id = "Active"});
+                list.ActiveTypes.Add(new ActiveTypesDto {Name = "InActive", Id = "InActive"});
 
                 resp.SetDto(list);
                 resp.Message = "Data retrieved.";
@@ -129,19 +113,16 @@ namespace EventApi.Controllers
             }
             catch (Exception ex)
             {
-                ErrorResponse errResp = new School.Api.Event.Model.ErrorResponse();
-                ExceptionDetails errDt = new School.Api.Event.Model.ExceptionDetails();
+                var errResp = new ErrorResponse();
+                var errDt = new ExceptionDetails();
                 errDt.Message = ex.StackTrace;
 
                 errResp.SetException(errDt);
                 result = StatusCode(500, errResp);
-
             }
 
             return result;
-
         }
-
 
 
         // GET api/values
@@ -149,16 +130,14 @@ namespace EventApi.Controllers
         [Route("OccuranceTypes")]
         public IActionResult OccuranceTypes()
         {
-
-
             ObjectResult result = null;
             try
             {
-                Response<OccuranceTypeList> resp = new Response<OccuranceTypeList>();
-                OccuranceTypeList list = new School.Api.Event.Model.OccuranceTypeList();
-                list.OccurenceTypes.Add(new OccuranceTypeDto { Id= "1" ,Name= "Weekly" });
-                list.OccurenceTypes.Add(new OccuranceTypeDto { Id = "2", Name = "One Time" });
-                list.OccurenceTypes.Add(new OccuranceTypeDto { Id = "3", Name = "Custom" });
+                var resp = new Response<OccuranceTypeList>();
+                var list = new OccuranceTypeList();
+                list.OccurenceTypes.Add(new OccuranceTypeDto {Id = "1", Name = "Weekly"});
+                list.OccurenceTypes.Add(new OccuranceTypeDto {Id = "2", Name = "One Time"});
+                list.OccurenceTypes.Add(new OccuranceTypeDto {Id = "3", Name = "Custom"});
 
                 resp.SetDto(list);
                 resp.Message = "Data retrieved.";
@@ -166,22 +145,15 @@ namespace EventApi.Controllers
             }
             catch (Exception ex)
             {
-                ErrorResponse errResp = new School.Api.Event.Model.ErrorResponse();
-                ExceptionDetails errDt = new School.Api.Event.Model.ExceptionDetails();
+                var errResp = new ErrorResponse();
+                var errDt = new ExceptionDetails();
                 errDt.Message = ex.StackTrace;
 
                 errResp.SetException(errDt);
                 result = StatusCode(500, errResp);
-
             }
 
             return result;
-
         }
-
-
-
-
-
     }
 }
