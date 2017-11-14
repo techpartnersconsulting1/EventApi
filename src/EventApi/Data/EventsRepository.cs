@@ -40,19 +40,23 @@ namespace School.Api.Event.Data
                         command.Parameters.Add(new SqlParameter { ParameterName = "@SchoolID", DbType = DbType.Int32, Value = Convert.ToInt32(dto.SchoolId) });
                         command.Parameters.Add(new SqlParameter { ParameterName = "@SchoolDistrictID", DbType = DbType.Int32, Value = Convert.ToInt32(dto.SchoolDistrictId) });
                         command.Parameters.Add(new SqlParameter { ParameterName = "@Email", DbType = DbType.String, Value = dto.userId });
-                        var dr = command.ExecuteReader();
-                        while (dr.Read())
+                        var scalar = command.ExecuteScalar() as string;
+                        if (!string.IsNullOrWhiteSpace(scalar))
                         {
-                            var jsonStr = dr["dto"] as string;
-                            if (!string.IsNullOrWhiteSpace(jsonStr))
+                            var jObj = JObject.Parse(scalar);
+                            var jDto = jObj["dto"];
+                            if (jDto != null)
                             {
-                                var jarray = JArray.Parse(jsonStr);
-                                var list = jarray.ToObject<List<EventDto>>();
-                                eventList.Events.AddRange(list);
+                                var jarray = jDto["events"] as JArray;
+                                var list = jarray?.ToObject<List<EventDto>>();
+                                if (list != null)
+                                {
+                                    eventList.Events.AddRange(list);
+                                }
                             }
                         }
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw;
                     }
@@ -88,7 +92,7 @@ namespace School.Api.Event.Data
                         }
                         return output;
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         throw;
                     }
