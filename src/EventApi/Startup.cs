@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.XPath;
+using Data.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -41,7 +42,7 @@ namespace EventApi
             services.AddMvc()
                 .AddJsonOptions(
                     opts => { opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver(); });
-
+            services.AddSingleton<IEventsRepository, EventsRepository>();
             services.AddSwaggerGen();
 
             services.ConfigureSwaggerGen(options =>
