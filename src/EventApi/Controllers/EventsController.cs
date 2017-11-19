@@ -1,8 +1,10 @@
 ﻿using System;
+using Data.Events;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using School.Api.Event.Data;
 using School.Api.Event.Model;
+using School.Api.Event.Services;
 
 namespace EventApi.Controllers
 {
@@ -12,6 +14,11 @@ namespace EventApi.Controllers
     {
         private IEventsRepository Repository { get; }
 
+        public EventsController(IOptions<ConfigOptions> opt)
+        {
+            var connString = opt.Value.ConnectionString;
+            Repository = new EventsRepository(connString);
+        }
 
         [HttpPost]
         [Route("Search")]
@@ -45,7 +52,7 @@ namespace EventApi.Controllers
             try
             {
                 var resp = new Response<EventDto>();
-                var jsonResp = Repository.Save(request.Request);
+                var jsonResp = Repository.Save(request.Request.EventDto);
                 var jobj = JObject.Parse(jsonResp);
                 var newEvent = jobj.ToObject<EventDto>();
                 resp.SetDto(newEvent);
@@ -125,7 +132,6 @@ namespace EventApi.Controllers
         }
 
 
-        // GET api/values
         [HttpGet]
         [Route("OccuranceTypes")]
         public IActionResult OccuranceTypes()

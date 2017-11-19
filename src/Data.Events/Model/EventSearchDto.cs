@@ -1,4 +1,4 @@
-﻿namespace School.Api.Event.Model
+﻿namespace Data.Events
 {
     public class EventSearchDto
     {

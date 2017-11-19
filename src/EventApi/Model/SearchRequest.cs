@@ -1,4 +1,6 @@
-﻿namespace School.Api.Event.Model
+﻿using Data.Events;
+
+namespace School.Api.Event.Model
 {
     public class SearchRequest
     {

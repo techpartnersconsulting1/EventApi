@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace School.Api.Event.Model
+namespace Data.Events
 {
     public class EventDto
     {
         [JsonProperty("associations")]
-        public EventAssociationDto Association = new EventAssociationDto();
+        public IList<EventAssociationDto> Associations = new List<EventAssociationDto>();
 
         //public EventType EventType { get; set; } = new EventType();
 
@@ -31,6 +31,6 @@ namespace School.Api.Event.Model
         public OccuranceTypeDto OccuranceType { get; set; } = new OccuranceTypeDto();
 
         [JsonProperty("schedules")]
-        public List<ScheduleDto> Schedules { get; set; } = new List<ScheduleDto>();
+        public IList<ScheduleDto> Schedules { get; set; } = new List<ScheduleDto>();
     }
 }

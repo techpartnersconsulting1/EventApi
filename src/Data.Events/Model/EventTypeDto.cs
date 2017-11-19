@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace School.Api.Event.Model
+namespace Data.Events
 {
     public class EventTypeDto
     {

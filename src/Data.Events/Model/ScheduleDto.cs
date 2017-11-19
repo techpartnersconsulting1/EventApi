@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace School.Api.Event.Model
+namespace Data.Events
 {
     public class ScheduleDto
     {
@@ -19,6 +19,6 @@ namespace School.Api.Event.Model
 
 
         [JsonProperty("weekDays")]
-        public List<string> WeekDays { get; set; } = new List<string>();
+        public virtual IList<string> WeekDays { get; set; } = new List<string>();
     }
 }

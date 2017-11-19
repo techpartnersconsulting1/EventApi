@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace School.Api.Event.Model
+namespace Data.Events
 {
     public class EventTypesDtoList
     {
