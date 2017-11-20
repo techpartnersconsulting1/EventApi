@@ -5,8 +5,8 @@ namespace Data.Events
 {
     public class EventDto
     {
-        [JsonProperty("associations")]
-        public IList<EventAssociationDto> Associations = new List<EventAssociationDto>();
+        [JsonProperty("association")]
+        public EventAssociationDto Association = new EventAssociationDto();
 
         //public EventType EventType { get; set; } = new EventType();
 
