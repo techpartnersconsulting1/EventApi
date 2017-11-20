@@ -4,12 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.XPath;
+using Data.Events;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
+using School.Api.Event.Services;
 using Swashbuckle.Swagger.Model;
 using Swashbuckle.SwaggerGen.Annotations;
 
@@ -24,6 +26,7 @@ namespace EventApi
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
+
             Configuration = builder.Build();
 
         }
@@ -33,11 +36,13 @@ namespace EventApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ConfigOptions>(Configuration.GetSection("DbSettings"));
+
             // Add framework services.
             services.AddMvc()
                 .AddJsonOptions(
                     opts => { opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver(); });
-
+            services.AddSingleton<IEventsRepository, EventsRepository>();
             services.AddSwaggerGen();
 
             services.ConfigureSwaggerGen(options =>
