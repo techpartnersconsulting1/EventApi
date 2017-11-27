@@ -45,7 +45,7 @@ namespace Data.Events
                         });
                         command.Parameters.Add(new SqlParameter
                         {
-                            ParameterName = "@Email",
+                            ParameterName = "@UserID",
                             DbType = DbType.String,
                             Value = dto.userId
                         });
