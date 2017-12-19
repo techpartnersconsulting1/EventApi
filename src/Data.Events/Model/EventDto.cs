@@ -16,6 +16,10 @@ namespace Data.Events
         [JsonProperty("name")]
         public string Name { get; set; } = string.Empty;
 
+        [JsonProperty("eventActionType")]
+        public string eventActionType { get; set; } = string.Empty;
+        
+
         [JsonProperty("locationVenue")]
         public string LocationVenue { get; set; } = string.Empty;
 
