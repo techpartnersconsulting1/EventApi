@@ -32,7 +32,7 @@ namespace Data.Events
         public string UpdateUser { get; set; } = string.Empty;
         public string UpdateDate { get; set; } = string.Empty;
 
-        public OccuranceTypeDto OccuranceType { get; set; } = new OccuranceTypeDto();
+        public OccuranceTypeDto occurrenceType { get; set; } = new OccuranceTypeDto();
 
         [JsonProperty("schedules")]
         public IList<ScheduleDto> Schedules { get; set; } = new List<ScheduleDto>();
