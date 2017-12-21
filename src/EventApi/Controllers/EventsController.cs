@@ -84,7 +84,7 @@ namespace EventApi.Controllers
                 list.EventTypes.Add(new EventTypeDto {Id = "School", Name = "School"});
                 list.EventTypes.Add(new EventTypeDto {Id = "Grade", Name = "Grade"});
                 list.EventTypes.Add(new EventTypeDto {Id = "Class", Name = "Class"});
-                list.EventTypes.Add(new EventTypeDto {Id = "School District", Name = "School District"});
+                list.EventTypes.Add(new EventTypeDto {Id = "SchoolDistrict", Name = "SchoolDistrict"});
                 resp.SetDto(list);
                 resp.Message = "Data retrieved.";
                 result = new OkObjectResult(resp);
